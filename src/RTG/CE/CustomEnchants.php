@@ -52,7 +52,7 @@ class CustomEnchants extends PluginBase implements Listener {
 								
 								case "armors":
 									
-									$sender->sendMessage("-> §adefender§f - has");
+									$sender->sendMessage("-> §adefender§f - has Thorns II and Fire Protection III. This comes in a set. This costs §c5500");
 									
 									return true;
 								break;
@@ -94,6 +94,18 @@ class CustomEnchants extends PluginBase implements Listener {
 									else {
 										$api->reduceMoney($sender->getName(), 4500);
 										$this->onRage($player);
+									}
+									return true;
+								break;
+								
+								case "defender":
+									$player = $sender;
+									
+									if($money < 5500) {
+										$sender->sendMessage("[CE] You need 5500 to buy this Kit!");
+									}
+									else {
+										$this->onDefender($player);
 									}
 									return true;
 								break;
@@ -158,6 +170,32 @@ class CustomEnchants extends PluginBase implements Listener {
 		$player->getInventory()->addItem($item);
 		
 		$player->sendMessage("§b§e[CE]§r You have successfully purchased Rager. Please check your inventory for the Enchanted Item!");
+	}
+	
+	public function onDefender($player) {
+		$item = Item::getItem(310, 0, 1);
+		$itemm = Item::getItem(311, 0, 1);
+		$itemmm = Item::getItem(312, 0, 1);
+		$i = Item::getItem(313, 0, 1);
+		// Enchantments
+		// Thorns
+		$item->addEnchantment(Enchantment::getEnchantment(5)->setLevel(2);
+		$itemm->addEnchantment(Enchantment::getEnchantment(5)->setLevel(2);
+		$itemmm->addEnchantment(Enchantment::getEnchantment(5)->setLevel(2);
+		$i->addEnchantment(Enchantment::getEnchantment(5)->setLevel(2);
+		// Fire Protection
+		$f = Enchantment::getEnchantment(5);
+		$item->addEnchantment($f)->setLevel(3);
+		$itemm->addEnchantment($f)->setLevel(3);
+		$itemmm->addEnchantment($f)->setLevel(3);
+		$i->addEnchantment($f)->setLevel(3);
+		// Finish Enchantment
+		$player->getInventory()->addItem($item);
+		$player->getInventory()->addItem($itemm);
+		$player->getInventory()->addItem($itemmm);
+		$player->getInventory()->addItem($i);
+		
+		$player->sendMessage("[CE] You have successfully purchased Defender! Please check your inventory for the Enchanted Item!");
 	}
 	
 	public function onDamage(EntityDamageEvent $e) {
