@@ -4,12 +4,23 @@ namespace RTG\CE;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
+use pocketmine\block\Block;
 use pocketmine\Player;
 use pocketmine\item\Item;
 use pocketmine\entity\Effect;
 use pocketmine\event\Listener;
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
+use pocketmine\tile\Chest;
+use pocketmine\tile\Tile;
+use pocketmine\math\Vector3;
+use pocketmine\nbt\NBT;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\ListTag;
+use pocketmine\nbt\tag\StringTag;
+use pocketmine\level\Position;
+use pocketmine\level\Level;
 
 /**
 	* All rights reserved (c) RTGNetworkkk
@@ -24,6 +35,10 @@ class CustomEnchants extends PluginBase implements Listener {
 	
 	public function onEnable() {
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
+		$this->getLogger()->warning("
+* CustomEnchantments Beta 2
+* GitHub: https://github.com/RTGNetworkkk
+	");
 	}
 	
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
@@ -43,7 +58,7 @@ class CustomEnchants extends PluginBase implements Listener {
 								
 								case "swords":
 								
-									$sender->sendMessage("-> §czaroc§f - has Sharpness II and Fire Aspect III. This sets your oponent to fire! This costs §e2500");
+									$sender->sendMessage("-> §czaroc§f - has Sharpness II and Fire Aspect III. This sets your oponent to fire! This costs §e2500"); // Beta 2 GUI compatiblity
 									$sender->sendMessage("");
 									$sender->sendMessage("-> §brager§f - has Haste II, Blindness II and Fire Aspect II. This lets you RAGE. This costs §e4500");
 									
@@ -155,9 +170,26 @@ class CustomEnchants extends PluginBase implements Listener {
 		$item->addEnchantment($h);
 		$item->setCustomName("§bZaRoc\n§eFire Aspect III\n§cSharpness II\n§f50% chance of fire");
 		
-		$player->getInventory()->addItem($item);
+		//$player->getInventory()->addItem($item);
 		
 		$player->sendMessage("§b§e[CE]§r You have successfully purchased ZaRoc. Please check your inventory for the Enchanted Item!");
+		// Beta 2 add ons TILE
+		
+		$player->getLevel()->setBlock(new Vector3($player->x, $player->y - 2, $player->z), $block, true, true);
+    $nbt = new CompoundTag("", [
+      new ListTag("Items", []),
+      new StringTag("id", Tile::CHEST),
+      new IntTag("x", floor($player->x)),
+      new IntTag("y", floor($player->y) - 2),
+      new IntTag("z", floor($player->z))
+    ]);
+    $nbt->Items->setTagType(NBT::TAG_Compound);
+    $tile = Tile::createTile("Chest", $player->getLevel()->getChunk($player->getX() >> 4, $player->getZ() >> 4), $nbt);
+    $i = $tile->getInventory();
+    $i->addItem($item);
+    $player->addWindow($tile->getInventory());
+    
+    // Close TILE
 	}
 	
 	public function onRage($player) {
@@ -182,7 +214,7 @@ class CustomEnchants extends PluginBase implements Listener {
 		$item->addEnchantment(Enchantment::getEnchantment(5)->setLevel(2));
 		$itemm->addEnchantment(Enchantment::getEnchantment(5)->setLevel(2));
 		$itemmm->addEnchantment(Enchantment::getEnchantment(5)->setLevel(2));
-		$i->addEnchantment(Enchantment::getEnchantment(5)->setLevel(2)$:
+		$i->addEnchantment(Enchantment::getEnchantment(5)->setLevel(2));
 		// Fire Protection
 		$f = Enchantment::getEnchantment(5);
 		$item->addEnchantment($f)->setLevel(3);
@@ -221,7 +253,7 @@ class CustomEnchants extends PluginBase implements Listener {
 				$d->sendMessage("Fire Aspect Enabled!");
 				$h = Effect::getEffect(3);
 				$p->addEffect($h)->setDuration(13 * 20)->setAmplifier(1));
-				$d->sendMessage("Haste Enabled!"):
+				$d->sendMessage("Haste Enabled!");
 				$b = Effect::getEffect(15);
 				$p->addEffect($b)->setDuration(13 * 20)->setAmplifier(1));
 				$d->sendMessage("Blindness Enabled!");
