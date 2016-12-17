@@ -3,3 +3,6 @@ version: 1.0.0
 main: RTG\CE\CustomEnchants
 author: IG
 api: 2.1.0
+commands:
+  ce:
+    usage: "/ce"
